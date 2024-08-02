@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:todo_app/main.dart';
+import 'package:todo_app/color.dart';
+import 'package:todo_app/todo.dart';
+
 
 class ToDoItem extends StatelessWidget {
   final ToDo todo;
@@ -20,7 +22,9 @@ class ToDoItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 20),
+      margin: EdgeInsets.symmetric(
+        vertical: 5,
+      ),
       child: ListTile(
         onTap: () {
           onToDoChanged(todo);
@@ -28,7 +32,10 @@ class ToDoItem extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
-        contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 5,
+        ),
         tileColor: Colors.white,
         leading: Icon(
           todo.isDone! ? Icons.check_box : Icons.check_box_outline_blank,
@@ -45,34 +52,42 @@ class ToDoItem extends StatelessWidget {
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (todo.description != null) Text(todo.description!),
-            if (todo.dueDate != null)
-              Text(
-                'Due Date: ${DateFormat('dd/MM/yyyy').format(todo.dueDate!)}',
+            Text(todo.description!),
+            Text(
+              'Due Date: ${DateFormat('dd/MM/yyyy').format(todo.dueDate!)}',
+              style: TextStyle(color: Colors.grey),
+            ),
+            Text(
+              'Priority: ${todo.priority}',
+              style: TextStyle(
+                color: todo.priority == 'High'
+                    ? Colors.red
+                    : todo.priority == 'Medium'
+                    ? Colors.orange
+                    : Colors.green,
               ),
+            ),
           ],
         ),
-        trailing: Container(
-          padding: EdgeInsets.all(0),
-          margin: EdgeInsets.symmetric(vertical: 12),
-          height: 35,
-          width: 35,
-          decoration: BoxDecoration(
-            color: tdRed,
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: IconButton(
-            color: Colors.white,
-            iconSize: 18,
-            icon: Icon(Icons.delete),
-            onPressed: () {
-              onDeleteItem(todo.id!);
-            },
-          ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: Icon(Icons.edit),
+              color: Colors.green,
+              onPressed: () {
+                onEditItem(todo);
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.delete),
+              color: tdRed,
+              onPressed: () {
+                onDeleteItem(todo.id!);
+              },
+            ),
+          ],
         ),
-        onLongPress: () {
-          onEditItem(todo);
-        },
       ),
     );
   }

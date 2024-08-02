@@ -4,7 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:todo_app/main.dart';
+import 'package:todo_app/color.dart';
+import 'package:todo_app/todo.dart';
+import 'package:todo_app/todo_item.dart';
+
 
 class Home extends StatefulWidget {
   Home({Key? key}) : super(key: key);
@@ -134,7 +137,7 @@ class _HomeState extends State<Home> {
 
   void _handleToDoChange(ToDo todo) {
     setState(() {
-      todo.isDone = todo.isDone;
+      todo.isDone = !todo.isDone!;
     });
     _saveToDoList();
   }
@@ -155,6 +158,7 @@ class _HomeState extends State<Home> {
         priority: priority,
         dueDate: dueDate,
       ));
+      _foundToDo = todosList;
     });
     _saveToDoList();
   }
@@ -166,6 +170,7 @@ class _HomeState extends State<Home> {
       todo.description = description;
       todo.priority = priority;
       todo.dueDate = dueDate;
+      _foundToDo = todosList;
     });
     _saveToDoList();
   }
@@ -302,7 +307,9 @@ class _HomeState extends State<Home> {
           prefixIcon: Icon(
             Icons.search,
             color: tdBlack,
-            size: 20,
+            size
+
+                : 20,
           ),
           prefixIconConstraints: BoxConstraints(
             maxHeight: 20,
